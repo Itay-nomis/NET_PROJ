@@ -14,7 +14,6 @@ function App() {
         <nav>
           <Link to="/login">Login</Link> |{" "}
           <Link to="/register">Register</Link> |{" "}
-          <Link to="/reset-password">Reset Password</Link> |{" "}
           <Link to="/system">System</Link>
         </nav>
         <Routes>

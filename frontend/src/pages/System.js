@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/system.css"; // ייבוא עיצוב
+import ResetPassword from './ForgotPassword';
 
 function System() {
   const [clients, setClients] = useState([]); // רשימת לקוחות
@@ -55,6 +56,7 @@ function System() {
           </li>
         ))}
       </ul>
+	   <a href="/reset-password" className="reset-password">Reset Password?</a>
     </div>
   );
 }
