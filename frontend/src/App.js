@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
-import ForgotPassword from "./pages/ForgotPassword";
 import System from "./pages/System";
+import ForgotPassword from "./pages/ForgotPassword"; // ייבוא רכיב ForgotPassword
 
 function App() {
   return (
@@ -15,14 +15,13 @@ function App() {
           <Link to="/login">Login</Link> |{" "}
           <Link to="/register">Register</Link> |{" "}
           <Link to="/reset-password">Reset Password</Link> |{" "}
-          <Link to="/forgot-password">Forgot Password</Link> |{" "}
           <Link to="/system">System</Link>
         </nav>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} /> {/* נתיב בלי קישור בניווט */}
           <Route path="/system" element={<System />} />
         </Routes>
       </div>

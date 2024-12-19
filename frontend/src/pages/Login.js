@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import '../styles/login.css'; // ייבוא עיצוב
+import ForgotPassword from './ForgotPassword';
 
 function Login() {
   const [username, setUsername] = useState(""); // state עבור שם משתמש
@@ -31,32 +32,36 @@ function Login() {
   };
 
   return (
-      <div className="login-container">
-        <h2>Login to Comunication_LTD</h2>
+    <div className="login-container">
+      <h2>Login to Comunication_LTD</h2>
+      <div className="login-box">
         <form onSubmit={handleSubmit}> {/* קריאה לפונקציית handleSubmit */}
           <label>
             Username:
             <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)} // עדכון ה-state של שם המשתמש
-                required
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)} // עדכון ה-state של שם המשתמש
+              required
             />
           </label>
           <br />
           <label>
             Password:
             <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)} // עדכון ה-state של הסיסמה
-                required
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} // עדכון ה-state של הסיסמה
+              required
             />
           </label>
           <br />
           <button type="submit">Login</button>
         </form>
+        <a href="/forgot-password" className="forgot-password">Forgot Password?</a>
+        {/* הקישור Forgot Password הוסר מהשורה העליונה */}
       </div>
+    </div>
   );
 }
 
