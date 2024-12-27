@@ -1,6 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from backend.models import Base
+
 # MySQL connection details
 mysql_user = 'root'
 mysql_password = 'password'
@@ -15,7 +17,14 @@ connection_string = f'mysql+pymysql://{mysql_user}:{mysql_password}@{mysql_host}
 engine = create_engine(connection_string)
 
 # Create a configured "Session" class
-Session = sessionmaker(bind=engine)
+SessionLocal = sessionmaker(autocommit=False ,autoflush=False, bind=engine)
 
-# Create a session
-session = Session()
+def create_tables():
+    Base.metadata.create_all(bind=engine)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
