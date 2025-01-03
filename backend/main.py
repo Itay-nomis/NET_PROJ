@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
-from backend.routes import router
+from routes import router
 from database.mysql_db import create_tables
 
 app = FastAPI()

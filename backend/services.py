@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
-from backend.models import User
-from backend.utils import encrypt_password
+from database.models import User
+from utils import encrypt_password
 
 
 def check_login(username: str, password: str, db: Session) -> bool:

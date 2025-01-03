@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from starlette.responses import JSONResponse
 
-from backend.services import check_login, register_user
+from services import check_login, register_user
 from database.mysql_db import get_db
 
 router = APIRouter()
@@ -13,5 +14,5 @@ def login(username: str, password: str, db: Session = Depends(get_db)) -> bool:
 
 
 @router.post("/register")
-def register(username: str, password: str, email: str, db: Session = Depends(get_db)) -> None:
+def register(username: str, password: str, email: str, db: Session = Depends(get_db)) -> JSONResponse:
     return register_user(username=username, password=password, email=email, db=db)
