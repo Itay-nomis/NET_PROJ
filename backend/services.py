@@ -25,7 +25,7 @@ def register_user(username: str, password: str, email: str, db: Session) -> JSON
 
 
 def check_password(password: str) -> bool:
-    pass
+    return True
     # TODO Read file password configuration and check that the password is correctly defined
 
 
