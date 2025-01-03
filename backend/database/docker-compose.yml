@@ -9,8 +9,6 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: project
       MYSQL_BIND_ADDRESS: 0.0.0.0
-    networks:
-      - app_network
 
   backend:
     build:
@@ -26,8 +24,6 @@ services:
       MYSQL_DATABASE: project
     depends_on:
       - mysql
-    networks:
-      - app_network
     restart: always  
 
 #  frontend:
@@ -39,12 +35,8 @@ services:
 #      - "3000:3000"
 #    depends_on:
 #      - backend
-#    networks:
-#      - app_network
 #    restart: always
 #
 #volumes:
 #  mysql_data:
 
-networks:
-  app_network:
