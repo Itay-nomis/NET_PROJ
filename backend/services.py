@@ -48,7 +48,7 @@ def check_password(password: str) -> bool:
 
 
 # TODO forgot password -> DOR
-# TODO make sure uniqueness on register -> OMRI V
+# TODO make sure uniqueness on register -> OMRI
 # TODO STMP server for forgot password -> DOR
 # TODO think about unsafe code
 # TODO configuration file that checks password is met with requirements -> OMRI

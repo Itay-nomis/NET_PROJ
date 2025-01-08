@@ -1,48 +1,55 @@
 import React, { useState } from "react";
-import '../styles/login.css'; // ייבוא עיצוב
-import ForgotPassword from './ForgotPassword';
+import { useNavigate } from "react-router-dom";
+import "../styles/login.css";
 
-function Login() {
-  const [username, setUsername] = useState(""); // state עבור שם משתמש
-  const [password, setPassword] = useState(""); // state עבור סיסמה
+function Login({ setIsLoggedIn }) { // מקבל את setIsLoggedIn כ-פרופס
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  // פונקציה לטיפול בשליחת הטופס
   const handleSubmit = async (e) => {
-    e.preventDefault(); // מניעת טעינת עמוד מחדש
-
+    e.preventDefault();
+  
+    if (!username || !password) {
+      alert("Username and password are required!");
+      return;
+    }
+  
     try {
-      // שליחת בקשת API לשרת ה-Backend
-      const response = await fetch('http://localhost:5000/login', {
-        method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-});
-
-
-      const data = await response.json(); // קבלת תגובת השרת
-
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }), // שליחה נכונה של שם משתמש וסיסמה
+      });
+  
+      const data = await response.json();
+  
       if (response.ok) {
-        alert(data.message); // הודעה במקרה של התחברות מוצלחת
+        alert(data.message);
+        navigate("/system"); // מעבר למסך System אם ההתחברות הצליחה
       } else {
-        alert(data.message); // הודעה במקרה של שגיאה
+        alert(data.message); // הצגת הודעת שגיאה משרת ה-Backend
       }
     } catch (error) {
-      console.error('Error during login:', error);
-      alert('An error occurred. Please try again.');
+      console.error("Error during login:", error);
+      alert("An error occurred. Please try again.");
     }
   };
+  
 
   return (
     <div className="login-container">
       <h2>Login to Comunication_LTD</h2>
       <div className="login-box">
-        <form onSubmit={handleSubmit}> {/* קריאה לפונקציית handleSubmit */}
+        <form onSubmit={handleSubmit}>
           <label>
             Username:
             <input
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)} // עדכון ה-state של שם המשתמש
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </label>
@@ -52,15 +59,16 @@ function Login() {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)} // עדכון ה-state של הסיסמה
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </label>
           <br />
           <button type="submit">Login</button>
         </form>
-        <a href="/forgot-password" className="forgot-password">Forgot Password?</a>
-        {/* הקישור Forgot Password הוסר מהשורה העליונה */}
+        <a href="/forgot-password" className="forgot-password">
+          Forgot Password?
+        </a>
       </div>
     </div>
   );
