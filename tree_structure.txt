@@ -1,0 +1,59 @@
+Folder PATH listing
+Volume serial number is 8616-2A3D
+D:.
+³   .gitignore
+³   package-lock.json
+³   README.md
+³   tree_structure.txt
+³   
+ÃÄÄÄbackend
+³   ³   Dockerfile
+³   ³   main.py
+³   ³   package-lock.json
+³   ³   password_configuration
+³   ³   requirements.txt
+³   ³   routes.py
+³   ³   services.py
+³   ³   utils.py
+³   ³   
+³   ÀÄÄÄdatabase
+³           docker-compose.yml
+³           models.py
+³           mysql_db.py
+³           
+ÃÄÄÄdatabase
+³       package-lock.json
+³       
+ÀÄÄÄfrontend
+    ³   .gitignore
+    ³   Dockerfile
+    ³   package-lock.json
+    ³   package.json
+    ³   README.md
+    ³   
+    ÃÄÄÄpublic
+    ³       favicon.ico
+    ³       index.html
+    ³       logo192.png
+    ³       logo512.png
+    ³       manifest.json
+    ³       robots.txt
+    ³       
+    ÀÄÄÄsrc
+        ³   App.js
+        ³   index.js
+        ³   
+        ÃÄÄÄpages
+        ³       ForgotPassword.js
+        ³       Login.js
+        ³       Register.js
+        ³       ResetPassword.js
+        ³       System.js
+        ³       
+        ÀÄÄÄstyles
+                forgotPassword.css
+                login.css
+                register.css
+                resetPassword.css
+                system.css
+                
