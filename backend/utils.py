@@ -2,6 +2,7 @@ import hmac
 import hashlib
 import string
 import random
+import configparser
 
 salt = b'None'  # TODO add from configuration afterwards
 
@@ -35,17 +36,7 @@ def encrypt_with_sha1():
     return encrypted_string.hexdigest()
 
 
-#login with policy password
-#login with policy password
-#login with policy password
-
-
-
-
-
-import configparser
-
-
+# login with policy password
 def is_password_valid(password: str, policy: dict) -> bool:
     """
     Check if the given password complies with the password policy.
@@ -79,7 +70,6 @@ def is_password_valid(password: str, policy: dict) -> bool:
 
     # If all checks pass
     return True
-
 
 
 def load_password_policy(config_path='password_policy.ini'):

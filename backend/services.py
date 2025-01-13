@@ -1,61 +1,17 @@
+import random
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
 from database.models import User
 from utils import encrypt_password, is_password_valid
 
-'''
-def check_login(username: str, password: str, db: Session) -> bool:
-    hashed_password = encrypt_password(password)
-    user = db.query(User).filter(User.username == username , User.password == hashed_password).first()
-    return bool(user)
-
-def register_user(username: str, password: str, email: str, db: Session) -> JSONResponse:
-    try:
-        existing_user = db.query(User).filter((User.username == username) | (User.email == email)).first()
-        if existing_user:
-            return JSONResponse(
-                status_code=400,
-                content={"message": "Username or email already exists"}
-            )
-        if check_password(password=password):
-            user = User(
-                username=username,
-                email=email,
-                password=encrypt_password(password)
-            )
-            db.add(user)
-            db.commit()
-            db.refresh(user)
-            return JSONResponse(
-                status_code=201,
-                content={"message": "User registered successfully"}
-            )
-        return JSONResponse(
-            status_code=400,
-            content={"message": "Weak password"}  # TODO add reason
-        )
-    except Exception as e:
-        print(e)
-        return JSONResponse(
-            status_code=400,
-            content={"message": "Something went wrong"}
-        )
-'''
-def check_password(password: str) -> bool:
-    return True
-    # TODO Read file password configuration and check that the password is correctly defined
-
-
-
-
-
-
-
-#login with policy password
-#login with policy password
-#login with policy password
+# login with policy password
 from utils import load_password_policy
+from configuration import *
 
 # Load the password policy from the ini file
 password_policy = load_password_policy()
@@ -83,10 +39,9 @@ def check_login(username: str, password: str, db: Session) -> bool:
     return False
 
 
-
-
-
 login_attempts = {}  # Dictionary to track login attempts for each user
+email_to_recovery_password = {}
+
 
 def get_login_attempts(username: str) -> int:
     """
@@ -94,12 +49,14 @@ def get_login_attempts(username: str) -> int:
     """
     return login_attempts.get(username, 0)
 
+
 def reset_login_attempts(username: str):
     """
     Reset the login attempts counter for a user.
     """
     if username in login_attempts:
         login_attempts.pop(username)
+
 
 def increment_login_attempts(username: str):
     """
@@ -118,7 +75,6 @@ def register_user(username: str, password: str, email: str, db: Session) -> JSON
             )
 
         # Validate password
-        password_policy = load_password_policy()
         if not is_password_valid(password, password_policy):
             return JSONResponse(
                 status_code=400,
@@ -147,12 +103,39 @@ def register_user(username: str, password: str, email: str, db: Session) -> JSON
         )
 
 
+# Function to generate a 6-digit recovery code
+def generate_recovery_code():
+    return str(random.randint(100000, 999999))
 
 
+def password_recovery(email: str, db : Session):
+    if not db.query(User).filter((User.email == email)).first():
+        return False
+    recovery_code = generate_recovery_code()
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = email
+    message["Subject"] = subject
+    message.attach(MIMEText(f"Your recovery password is: {recovery_code}", "plain"))
+    try:
+        # Establish connection to the SMTP server
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()  # Secure the connection
+            server.login(sender_email, sender_password)
+            server.send_message(message)
+            print(f"Recovery email sent to {email}")
+            email_to_recovery_password[email.lower()] = recovery_code
+            return JSONResponse(status_code=200, content={"message": "Recovery password sent successfully"})
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        return JSONResponse(status_code=400, content={"message": "Something went wrong"})
 
 
-
-
+def verify_recovery_code(recovery_code: str, email: str):
+    if email_to_recovery_password.get(email.lower()) == recovery_code:
+        email_to_recovery_password.pop(email)
+        return JSONResponse(status_code=200, content={"message": "Correct recovery code"})
+    return JSONResponse(status_code=401, content={"message": "Wrong recovery code"})
 
 # TODO forgot password -> DOR
 # TODO make sure uniqueness on register -> OMRI
