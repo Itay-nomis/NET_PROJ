@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
-from schemas import LoginRequest, RegisterRequest, Client, ClientSchema
+from schemas import LoginRequest, RegisterRequest, ClientSchema
 from services import check_login, register_user, get_login_attempts, login_attempts, password_policy, password_recovery, \
     verify_recovery_code, change_current_password, add_client, get_clients_by_user
 from database.mysql_db import get_db

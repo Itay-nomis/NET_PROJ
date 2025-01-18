@@ -6,7 +6,7 @@ from email.mime.text import MIMEText
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
-from backend.schemas import ClientSchema
+from schemas import ClientSchema
 from database.models import User, Client
 from utils import encrypt_password, is_password_valid
 
@@ -134,19 +134,25 @@ def password_recovery(email: str, db : Session):
 
 def verify_recovery_code(recovery_code: str, email: str):
     if email_to_recovery_password.get(email.lower()) == recovery_code:
-        email_to_recovery_password.pop(email)
-        return JSONResponse(status_code=200, content={"message": "Correct recovery code"})
-    return JSONResponse(status_code=401, content={"message": "Wrong recovery code"})
+        return True
+    return False
 
 
 def change_current_password(email: str, new_password: str, db: Session):
-    # TODO add check for strong password
-    user = db.query(User).filter(User.email == email).first()
-    user.password = encrypt_password(new_password)
-    db.commit()
+    if is_password_valid(new_password, password_policy):
+        try:
+            user = db.query(User).filter(User.email == email).first()
+            user.password = encrypt_password(new_password)
+            db.commit()
+            email_to_recovery_password.pop(email)
+            return JSONResponse(status_code=200, content={"message": "Password changed successfully"})
+        except Exception as e:
+            print(e)
+            return JSONResponse(status_code=400, content={"message": "Something went wrong"})
+    return JSONResponse(status_code=400, content={"message": "Weak password"})
 
 
-def add_client(client: ClientSchema, user_id: int, db: Session)
+def add_client(client: ClientSchema, user_id: int, db: Session):
     if not db.query(Client).filter(Client.email == client.email).first():
         new_client = Client(user_id=user_id, name=client.name, email=client.email)
         db.add(new_client)
@@ -157,9 +163,3 @@ def add_client(client: ClientSchema, user_id: int, db: Session)
 
 def get_clients_by_user(user_id: int, db: Session):
     return db.query(Client).filter(Client.user_id == user_id).all()
-
-# TODO forgot password -> DOR
-# TODO make sure uniqueness on register -> OMRI
-# TODO STMP server for forgot password -> DOR
-# TODO think about unsafe code
-# TODO configuration file that checks password is met with requirements -> OMRI
