@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
-from schemas import LoginRequest, RegisterRequest
+from schemas import LoginRequest, RegisterRequest, Client, ClientSchema
 from services import check_login, register_user, get_login_attempts, login_attempts, password_policy, password_recovery, \
-    verify_recovery_code
+    verify_recovery_code, change_current_password, add_client, get_clients_by_user
 from database.mysql_db import get_db
 
 router = APIRouter()
@@ -58,6 +58,17 @@ def login(request: LoginRequest, db: Session = Depends(get_db)) -> JSONResponse:
 def forgot_password(email: str, db: Session = Depends(get_db)) -> JSONResponse:
     return password_recovery(email=email, db=db)
 
-@router.post("/verify_password_recovery")
-def verify_password_recovery(recovery_code: str, email: str):
-    return verify_recovery_code(recovery_code=recovery_code, email=email)
+@router.post("/change_password")
+def change_password(recovery_code: str, email: str, new_password: str, db: Session = Depends(get_db)) -> JSONResponse:
+    if verify_recovery_code(recovery_code=recovery_code, email=email):
+        return change_current_password(email=email, new_password=new_password, db=db)
+    return JSONResponse(status_code=401, content={"message": "Invalid recovery code."})
+
+@router.post("/add_client")
+def add_new_client(user_id: int, client: ClientSchema , db: Session = Depends(get_db)) -> JSONResponse:
+    return add_client(user_id=user_id, client=client, db=db)
+
+
+@router.get("/get_user_clients")
+def get_user_clients(user_id: int, db: Session = Depends(get_db)) -> JSONResponse:
+    return get_clients_by_user(user_id=user_id, db=db)

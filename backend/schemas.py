@@ -10,3 +10,7 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     username: str
     password: str
+
+class ClientSchema(BaseModel):
+    name: str
+    email: str

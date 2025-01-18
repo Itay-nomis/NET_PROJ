@@ -6,7 +6,8 @@ from email.mime.text import MIMEText
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
-from database.models import User
+from backend.schemas import ClientSchema
+from database.models import User, Client
 from utils import encrypt_password, is_password_valid
 
 # login with policy password
@@ -115,7 +116,7 @@ def password_recovery(email: str, db : Session):
     message = MIMEMultipart()
     message["From"] = sender_email
     message["To"] = email
-    message["Subject"] = subject
+    message["Subject"] = "Your Recovery Password"
     message.attach(MIMEText(f"Your recovery password is: {recovery_code}", "plain"))
     try:
         # Establish connection to the SMTP server
@@ -136,6 +137,26 @@ def verify_recovery_code(recovery_code: str, email: str):
         email_to_recovery_password.pop(email)
         return JSONResponse(status_code=200, content={"message": "Correct recovery code"})
     return JSONResponse(status_code=401, content={"message": "Wrong recovery code"})
+
+
+def change_current_password(email: str, new_password: str, db: Session):
+    # TODO add check for strong password
+    user = db.query(User).filter(User.email == email).first()
+    user.password = encrypt_password(new_password)
+    db.commit()
+
+
+def add_client(client: ClientSchema, user_id: int, db: Session)
+    if not db.query(Client).filter(Client.email == client.email).first():
+        new_client = Client(user_id=user_id, name=client.name, email=client.email)
+        db.add(new_client)
+        db.commit()
+        db.refresh(new_client)
+        return JSONResponse(status_code=200, content={"message": "Client added successfully"})
+    return JSONResponse(status_code=400, content={"message": "Client already exists"})
+
+def get_clients_by_user(user_id: int, db: Session):
+    return db.query(Client).filter(Client.user_id == user_id).all()
 
 # TODO forgot password -> DOR
 # TODO make sure uniqueness on register -> OMRI
