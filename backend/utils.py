@@ -13,7 +13,7 @@ def encrypt_password(password: str):
     :param password: the password to encrypt
     :return: encrypted password
     """
-    return hmac.new(salt, password.encode(), hashlib.sha256).hexdigest()
+    return hmac.new(salt, password.encode(), hashlib.sha1).hexdigest()
 
 
 def generate_random_string(length: int = 12):

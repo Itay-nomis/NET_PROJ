@@ -106,7 +106,7 @@ def register_user(username: str, password: str, email: str, db: Session) -> JSON
 
 # Function to generate a 6-digit recovery code
 def generate_recovery_code():
-    return str(random.randint(100000, 999999))
+    return encrypt_password(str(random.randint(100000, 999999)))
 
 
 def password_recovery(email: str, db : Session):
