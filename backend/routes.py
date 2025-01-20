@@ -58,11 +58,15 @@ def login(request: LoginRequest, db: Session = Depends(get_db)) -> JSONResponse:
 def forgot_password(email: str, db: Session = Depends(get_db)) -> JSONResponse:
     return password_recovery(email=email, db=db)
 
-@router.post("/change_password")
-def change_password(recovery_code: str, email: str, new_password: str, db: Session = Depends(get_db)) -> JSONResponse:
+@router.post("/change_password_with_verify_code")
+def change_password_with_verify_code(recovery_code: str, email: str, new_password: str, db: Session = Depends(get_db)) -> JSONResponse:
     if verify_recovery_code(recovery_code=recovery_code, email=email):
         return change_current_password(email=email, new_password=new_password, db=db)
     return JSONResponse(status_code=401, content={"message": "Invalid recovery code."})
+
+@router.post("/change_password")
+def change_password(email: str, new_password: str, db: Session = Depends(get_db)) -> JSONResponse:
+    return change_current_password(email=email, new_password=new_password, db=db)
 
 @router.post("/add_client")
 def add_new_client(user_id: int, client: ClientSchema , db: Session = Depends(get_db)) -> JSONResponse:
