@@ -14,5 +14,7 @@ RUN pip install -r requirements.txt
 # Expose the application port
 EXPOSE 5000
 
+RUN sleep 10
+
 CMD ["python", "main.py"]
 
