@@ -1,16 +1,26 @@
 import React, { useState } from "react";
-import '../styles/resetPassword.css'; // ייבוא עיצוב
+import { useNavigate } from "react-router-dom";
+import '../styles/resetPassword.css';
 
 function ResetPassword() {
-  const [username, setUsername] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // בדיקת התאמה בסיסית לסיסמה החדשה
+    if (!email || !newPassword || !confirmPassword) {
+      alert("All fields are required!");
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert("Invalid email format.");
+      return;
+    }
+
     if (newPassword.length < 10) {
       alert("Password must be at least 10 characters long.");
       return;
@@ -22,79 +32,73 @@ function ResetPassword() {
     }
 
     try {
-      // שלח בקשת POST ל-Backend
-      const response = await fetch("http://localhost:5000/api/reset-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          currentPassword,
-          newPassword,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:5000/change_password?email=${encodeURIComponent(email)}&new_password=${encodeURIComponent(newPassword)}`,
+        {
+          method: "POST",
+        }
+      );
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (error) {
+        console.error("Failed to parse response JSON:", error);
+        data = null;
+      }
 
-      if (response.ok) {
-        alert(data.message); // הצגת הודעת הצלחה
-      } else {
-        alert(data.message); // הצגת הודעת שגיאה
+      // הצגת הודעת הצלחה בכל מקרה בו הסיסמה שונתה בהצלחה
+      if (response.ok || (data && data.message?.toLowerCase().includes("password changed"))) {
+        alert("Password changed successfully!");
+        navigate("/login");
+      } else if (data && data.message) {
+        // הודעה רק אם יש תוכן שגיאה ספציפי
+        alert(`Error: ${data.message}`);
       }
     } catch (error) {
       console.error("Error resetting password:", error);
-      alert("An error occurred. Please try again.");
+      // הודעה כללית רק במקרה של שגיאת רשת או בעיה חמורה
+      alert("An unexpected error occurred. Please try again.");
     }
   };
 
   return (
-      <div className="reset-password-container">
-        <h2>Reset Password</h2>
-        <form onSubmit={handleSubmit}>
-          <label>
-            User Name:
-            <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-            />
-          </label>
-          <br />
-          <label>
-            Current Password:
-            <input
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                required
-            />
-          </label>
-          <br />
-          <label>
-            New Password:
-            <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-            />
-          </label>
-          <br />
-          <label>
-            Confirm Password:
-            <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-            />
-          </label>
-          <br />
-          <button type="submit">Change Password</button>
-        </form>
-      </div>
+    <div className="reset-password-container">
+      <h2>Reset Password</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Email:
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </label>
+        <br />
+        <label>
+          New Password:
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
+        </label>
+        <br />
+        <label>
+          Confirm Password:
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </label>
+        <br />
+        <button type="submit">Reset Password</button>
+      </form>
+    </div>
   );
 }
 

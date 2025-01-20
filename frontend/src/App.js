@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import System from "./pages/System";
 import ForgotPassword from "./pages/ForgotPassword";
-import ChangePassword from "./pages/ChangePassword";
+
 
 function App() {
   return (
@@ -21,10 +21,6 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route
-            path="/change-password"
-            element={<ChangePassword />}
-          />
           <Route path="/system" element={<System />} />
         </Routes>
       </div>
