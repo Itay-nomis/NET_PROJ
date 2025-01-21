@@ -144,7 +144,7 @@ def change_current_password(email: str, new_password: str, db: Session):
             user = db.query(User).filter(User.email == email).first()
             user.password = encrypt_password(new_password)
             db.commit()
-            email_to_recovery_password.pop(email)
+            email_to_recovery_password.pop(email, None)
             return JSONResponse(status_code=200, content={"message": "Password changed successfully"})
         except Exception as e:
             print(e)
