@@ -1,3 +1,4 @@
+
 services:
   mysql:
     restart: always
@@ -25,18 +26,19 @@ services:
     depends_on:
       - mysql
     restart: always  
-
-#  frontend:
-#    build:
-#      context: ../frontend
-#      dockerfile: ../frontend/Dockerfile
-#    container_name: frontend
-#    ports:
-#      - "3000:3000"
-#    depends_on:
-#      - backend
-#    restart: always
-#
-#volumes:
-#  mysql_data:
+    
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    stdin_open: true
+    restart: always
 
