@@ -6,6 +6,7 @@
 • Containerization: Docker, Docker Compose
 סיסמא ל-מסד הנתונים: password
 מבנה הפרויקט
+תחת ה-ROOT של הפרויקט קיימות 2 תיקיות Secured ו-Not-Secured ההבדל הוא רמת האבטחה - בתוך כל אחת תמצא את המבנה הבא:
 project/
 ├── backend/
 │   ├── main.py                 # קובץ ההרצה הראשי של ה-Backend
@@ -62,3 +63,5 @@ http://localhost:3000
 • GET /system – קבלת נתוני מערכת (דורש התחברות)
 פרטי יוצרי הפרויקט:
 יאנה סלדקוב, איתי סימון, דור מיטניק ועומרי גומל
+קישור ל-GIT של הפרויקט:
+https://github.com/Itay-nomis/NET_PROJ
