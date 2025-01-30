@@ -6,7 +6,7 @@ D:.
 ³   README.md
 ³   tree_structure.txt
 ³   
-ÃÄÄÄbackend
+backend
 ³   ³   Dockerfile
 ³   ³   main.py
 ³   ³   package-lock.json
@@ -16,22 +16,21 @@ D:.
 ³   ³   services.py
 ³   ³   utils.py
 ³   ³   
-³   ÀÄÄÄdatabase
+³   database
 ³           docker-compose.yml
 ³           models.py
 ³           mysql_db.py
 ³           
-ÃÄÄÄdatabase
+database
 ³       package-lock.json
 ³       
-ÀÄÄÄfrontend
+frontend
     ³   .gitignore
     ³   Dockerfile
     ³   package-lock.json
     ³   package.json
-    ³   README.md
     ³   
-    ÃÄÄÄpublic
+    public
     ³       favicon.ico
     ³       index.html
     ³       logo192.png
@@ -39,18 +38,18 @@ D:.
     ³       manifest.json
     ³       robots.txt
     ³       
-    ÀÄÄÄsrc
+    src
         ³   App.js
         ³   index.js
         ³   
-        ÃÄÄÄpages
+        pages
         ³       ForgotPassword.js
         ³       Login.js
         ³       Register.js
         ³       ResetPassword.js
         ³       System.js
         ³       
-        ÀÄÄÄstyles
+        styles
                 forgotPassword.css
                 login.css
                 register.css
