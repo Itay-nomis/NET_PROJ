@@ -1,3 +1,6 @@
+קישור ל-GIT של הפרויקט:
+https://github.com/Itay-nomis/NET_PROJ
+
 הפרויקט כולל ממשקי Frontend ו-Backend המאפשרים רישום משתמשים, התחברות, איפוס סיסמה והוספה וצפיה בלקוחות. הפרויקט משתמש ב-React עבור ה-Frontend וב-FastAPI עבור ה-Backend, יחד עם MySQL כמסד נתונים.
 טכנולוגיות ושפות תכנות:
 • Frontend: React, JavaScript, CSS
